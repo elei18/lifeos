@@ -2,12 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { createClient } from '@supabase/supabase-js';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getOpenAI() { return new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); }
+function getSupabase() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!); }
 
 const SYSTEM_PROMPT = `You are the AI enrichment engine for LifeOS, a personal family-life reflection system.
 
@@ -137,6 +133,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing entryId or rawText' }, { status: 400 });
     }
 
+    const openai = getOpenAI();
+    const supabase = getSupabase();
+
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       temperature: 0.3,
@@ -177,7 +176,7 @@ export async function POST(req: NextRequest) {
       try {
         const { entryId } = await req.json().catch(() => ({}));
         if (entryId) {
-          await supabase
+          await getSupabase()
             .from('entries')
             .update({ enrichment_status: 'failed' })
             .eq('id', entryId);

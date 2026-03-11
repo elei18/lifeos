@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { supabase, entriesApi, childrenApi } from '@/lib/supabase';
 import type { Entry, Child, PersonType } from '@/lib/supabase';
 import { BottomNav } from '@/components/BottomNav';
-import { getSentimentColor, getPatternEmoji, getPersonTypeEmoji, formatRelativeTime, getChildAge } from '@/lib/utils';
+import { getSentimentColor, getPatternEmoji, getPersonTypeEmoji } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 
@@ -59,7 +59,7 @@ export default function JournalPage() {
       {/* Header */}
       <div className="px-5 pt-12 pb-4">
         <h1 className="text-xl font-semibold text-stone-900">Journal</h1>
-        <p className="text-sm text-stone-400 mt-0.5">Everything you've logged.</p>
+        <p className="text-sm text-stone-400 mt-0.5">Everything you&apos;ve logged.</p>
       </div>
 
       {/* Filter tabs */}

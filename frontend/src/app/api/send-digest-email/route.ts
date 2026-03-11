@@ -3,11 +3,8 @@ import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
 import type { DigestContent } from '@/lib/supabase';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getResend() { return new Resend(process.env.RESEND_API_KEY); }
+function getSupabase() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!); }
 
 function buildEmailHtml(content: DigestContent, appUrl: string): string {
   const personEmoji: Record<string, string> = {
@@ -87,6 +84,8 @@ function buildEmailHtml(content: DigestContent, appUrl: string): string {
 
 export async function POST(req: NextRequest) {
   try {
+    const resend = getResend();
+    const supabase = getSupabase();
     const { digestId, userEmail } = await req.json();
     if (!digestId || !userEmail) {
       return NextResponse.json({ error: 'Missing digestId or userEmail' }, { status: 400 });

@@ -88,7 +88,7 @@ export default function SettingsPage() {
                 <div>
                   <p className="text-sm font-medium text-stone-800">{child.name}</p>
                   {child.date_of_birth && (
-                    <p className="text-xs text-stone-400">{getChildAge(child.date_of_birth)} old</p>
+                    <p className="text-xs text-stone-400">~{getChildAge(child.date_of_birth)} old</p>
                   )}
                 </div>
               </div>

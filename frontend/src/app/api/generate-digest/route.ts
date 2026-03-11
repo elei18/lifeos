@@ -2,14 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { createClient } from '@supabase/supabase-js';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getOpenAI() { return new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); }
+function getSupabase() { return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!); }
 
 export async function POST(req: NextRequest) {
   try {
+    const openai = getOpenAI();
+    const supabase = getSupabase();
     const { userId } = await req.json();
     if (!userId) return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
 

@@ -113,7 +113,7 @@ export default function EntryPage() {
             {entry.interpretation && (
               <div className="bg-amber-50 rounded-2xl border border-amber-100 p-5">
                 <p className="text-xs font-medium text-amber-700 uppercase tracking-wide mb-2">
-                  What's likely going on
+                  What&apos;s likely going on
                 </p>
                 <p className="text-stone-700 text-sm leading-relaxed">{entry.interpretation}</p>
               </div>
@@ -155,7 +155,7 @@ export default function EntryPage() {
         {/* Failed */}
         {entry.enrichment_status === 'failed' && (
           <div className="bg-rose-50 rounded-2xl border border-rose-100 p-5">
-            <p className="text-rose-700 text-sm">Couldn't interpret this one — the note was saved though.</p>
+            <p className="text-rose-700 text-sm">Couldn&apos;t interpret this one — the note was saved though.</p>
           </div>
         )}
       </div>

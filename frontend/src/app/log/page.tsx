@@ -8,8 +8,6 @@ import { BottomNav } from '@/components/BottomNav';
 import { cn } from '@/lib/utils';
 import { Mic, MicOff, Send, Loader2 } from 'lucide-react';
 
-type LogStep = 'who' | 'what';
-
 export default function LogPage() {
   const router = useRouter();
   const [children, setChildren] = useState<Child[]>([]);
@@ -17,10 +15,8 @@ export default function LogPage() {
   const [selectedPersonType, setSelectedPersonType] = useState<PersonType>('child');
   const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
   const [text, setText] = useState('');
-  const [step, setStep] = useState<LogStep>('who');
   const [submitting, setSubmitting] = useState(false);
   const [recording, setRecording] = useState(false);
-  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [transcribing, setTranscribing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -59,7 +55,6 @@ export default function LogPage() {
       mr.ondataavailable = (e) => chunksRef.current.push(e.data);
       mr.onstop = async () => {
         const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
-        setAudioBlob(blob);
         stream.getTracks().forEach(t => t.stop());
         await transcribeAudio(blob);
       };
@@ -139,7 +134,7 @@ export default function LogPage() {
       {/* Header */}
       <div className="px-5 pt-12 pb-4">
         <h1 className="text-xl font-semibold text-stone-900">What happened?</h1>
-        <p className="text-sm text-stone-400 mt-0.5">Log it. We'll make sense of it together.</p>
+        <p className="text-sm text-stone-400 mt-0.5">Log it. We&apos;ll make sense of it together.</p>
       </div>
 
       {/* Person selector */}

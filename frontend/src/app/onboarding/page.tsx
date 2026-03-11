@@ -30,7 +30,7 @@ export default function OnboardingPage() {
         if (!c.name.trim()) continue;
         await childrenApi.create(user.id, {
           name: c.name.trim(),
-          date_of_birth: c.dob || null,
+          date_of_birth: c.dob && c.dob.match(/^\d{4}-\d{2}$/) ? `${c.dob}-01` : null,
           display_order: i,
         });
       }
@@ -78,14 +78,14 @@ export default function OnboardingPage() {
             </div>
             <div className="bg-amber-50 rounded-2xl p-5 border border-amber-100">
               <p className="text-stone-700 text-sm leading-relaxed">
-                You write short notes — a meltdown at pickup, a quiet evening with your partner, a moment that felt off. LifeOS helps you see what's actually going on.
+                You write short notes — a meltdown at pickup, a quiet evening with your partner, a moment that felt off. LifeOS helps you see what&apos;s actually going on.
               </p>
             </div>
             <button
               onClick={() => setStep('children')}
               className="mt-2 bg-amber-700 text-white rounded-2xl py-4 text-base font-semibold w-full"
             >
-              Let's set up your family →
+              Let&apos;s set up your family →
             </button>
           </div>
         )}
@@ -127,17 +127,48 @@ export default function OnboardingPage() {
                     className="w-full border border-stone-200 rounded-xl px-4 py-3 text-base text-stone-900 placeholder:text-stone-300 bg-stone-50 focus:outline-none focus:border-amber-400"
                   />
                   <div>
-                    <label className="text-xs text-stone-400 mb-1 block">Date of birth (optional)</label>
-                    <input
-                      type="date"
-                      value={child.dob}
-                      onChange={(e) => {
-                        const updated = [...children];
-                        updated[i].dob = e.target.value;
-                        setChildren(updated);
-                      }}
-                      className="w-full border border-stone-200 rounded-xl px-4 py-3 text-base text-stone-700 bg-stone-50 focus:outline-none focus:border-amber-400"
-                    />
+                    <label className="text-xs text-stone-400 mb-1 block">Born around (optional)</label>
+                    <div className="flex gap-2">
+                      <select
+                        value={child.dob ? child.dob.split('-')[1] : ''}
+                        onChange={(e) => {
+                          const updated = [...children];
+                          const year = child.dob ? child.dob.split('-')[0] : '';
+                          updated[i].dob = e.target.value && year ? `${year}-${e.target.value}` : e.target.value ? `-${e.target.value}` : year ? `${year}-` : '';
+                          setChildren(updated);
+                        }}
+                        className="flex-1 border border-stone-200 rounded-xl px-3 py-3 text-base text-stone-700 bg-stone-50 focus:outline-none focus:border-amber-400"
+                      >
+                        <option value="">Month</option>
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                      </select>
+                      <select
+                        value={child.dob ? child.dob.split('-')[0] : ''}
+                        onChange={(e) => {
+                          const updated = [...children];
+                          const month = child.dob ? child.dob.split('-')[1] : '';
+                          updated[i].dob = e.target.value && month ? `${e.target.value}-${month}` : e.target.value ? `${e.target.value}-` : month ? `-${month}` : '';
+                          setChildren(updated);
+                        }}
+                        className="flex-1 border border-stone-200 rounded-xl px-3 py-3 text-base text-stone-700 bg-stone-50 focus:outline-none focus:border-amber-400"
+                      >
+                        <option value="">Year</option>
+                        {Array.from({ length: 19 }, (_, i) => new Date().getFullYear() - i).map((year) => (
+                          <option key={year} value={year}>{year}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </div>
               ))}

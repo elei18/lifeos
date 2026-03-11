@@ -158,7 +158,7 @@ export default function LoginPage() {
 
         {mode === 'signup' && (
           <p className="text-xs text-stone-400 text-center mt-4 leading-relaxed">
-            You'll need to enable Email auth in Supabase → Authentication → Providers.
+            You&apos;ll need to enable Email auth in Supabase → Authentication → Providers.
           </p>
         )}
       </div>
