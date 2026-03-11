@@ -68,7 +68,8 @@ export interface Child {
   id: string;
   user_id: string;
   name: string;
-  date_of_birth: string | null;
+  birth_season: string | null;
+  birth_year: number | null;
   display_order: number;
   created_at: string;
 }

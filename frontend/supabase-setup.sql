@@ -32,7 +32,8 @@ CREATE TABLE children (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users NOT NULL,
   name TEXT NOT NULL,
-  date_of_birth DATE,
+  birth_season TEXT,            -- 'Spring' | 'Summer' | 'Fall' | 'Winter'
+  birth_year INTEGER,
   display_order INTEGER DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );

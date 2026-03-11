@@ -87,8 +87,8 @@ export default function SettingsPage() {
               <div key={child.id} className="flex items-center justify-between py-1">
                 <div>
                   <p className="text-sm font-medium text-stone-800">{child.name}</p>
-                  {child.date_of_birth && (
-                    <p className="text-xs text-stone-400">~{getChildAge(child.date_of_birth)} old</p>
+                  {child.birth_year && (
+                    <p className="text-xs text-stone-400">~{getChildAge(child.birth_season, child.birth_year)} old</p>
                   )}
                 </div>
               </div>

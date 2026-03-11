@@ -8,13 +8,14 @@ type Step = 'welcome' | 'children' | 'partner' | 'done';
 
 interface ChildInput {
   name: string;
-  dob: string;
+  season: string;
+  year: string;
 }
 
 export default function OnboardingPage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>('welcome');
-  const [children, setChildren] = useState<ChildInput[]>([{ name: '', dob: '' }]);
+  const [children, setChildren] = useState<ChildInput[]>([{ name: '', season: '', year: '' }]);
   const [partnerName, setPartnerName] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -30,7 +31,8 @@ export default function OnboardingPage() {
         if (!c.name.trim()) continue;
         await childrenApi.create(user.id, {
           name: c.name.trim(),
-          date_of_birth: c.dob && c.dob.match(/^\d{4}-\d{2}$/) ? `${c.dob}-01` : null,
+          birth_season: c.season || null,
+          birth_year: c.year ? parseInt(c.year) : null,
           display_order: i,
         });
       }
@@ -130,42 +132,32 @@ export default function OnboardingPage() {
                     <label className="text-xs text-stone-400 mb-1 block">Born around (optional)</label>
                     <div className="flex gap-2">
                       <select
-                        value={child.dob ? child.dob.split('-')[1] : ''}
+                        value={child.season}
                         onChange={(e) => {
                           const updated = [...children];
-                          const year = child.dob ? child.dob.split('-')[0] : '';
-                          updated[i].dob = e.target.value && year ? `${year}-${e.target.value}` : e.target.value ? `-${e.target.value}` : year ? `${year}-` : '';
+                          updated[i].season = e.target.value;
                           setChildren(updated);
                         }}
                         className="flex-1 border border-stone-200 rounded-xl px-3 py-3 text-base text-stone-700 bg-stone-50 focus:outline-none focus:border-amber-400"
                       >
-                        <option value="">Month</option>
-                        <option value="01">January</option>
-                        <option value="02">February</option>
-                        <option value="03">March</option>
-                        <option value="04">April</option>
-                        <option value="05">May</option>
-                        <option value="06">June</option>
-                        <option value="07">July</option>
-                        <option value="08">August</option>
-                        <option value="09">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
+                        <option value="">Season</option>
+                        <option value="Spring">Spring</option>
+                        <option value="Summer">Summer</option>
+                        <option value="Fall">Fall</option>
+                        <option value="Winter">Winter</option>
                       </select>
                       <select
-                        value={child.dob ? child.dob.split('-')[0] : ''}
+                        value={child.year}
                         onChange={(e) => {
                           const updated = [...children];
-                          const month = child.dob ? child.dob.split('-')[1] : '';
-                          updated[i].dob = e.target.value && month ? `${e.target.value}-${month}` : e.target.value ? `${e.target.value}-` : month ? `-${month}` : '';
+                          updated[i].year = e.target.value;
                           setChildren(updated);
                         }}
                         className="flex-1 border border-stone-200 rounded-xl px-3 py-3 text-base text-stone-700 bg-stone-50 focus:outline-none focus:border-amber-400"
                       >
                         <option value="">Year</option>
-                        {Array.from({ length: 19 }, (_, i) => new Date().getFullYear() - i).map((year) => (
-                          <option key={year} value={year}>{year}</option>
+                        {Array.from({ length: 19 }, (_, j) => new Date().getFullYear() - j).map((yr) => (
+                          <option key={yr} value={yr}>{yr}</option>
                         ))}
                       </select>
                     </div>
@@ -176,7 +168,7 @@ export default function OnboardingPage() {
 
             {children.length < 4 && (
               <button
-                onClick={() => setChildren([...children, { name: '', dob: '' }])}
+                onClick={() => setChildren([...children, { name: '', season: '', year: '' }])}
                 className="text-amber-700 text-sm font-medium py-2"
               >
                 + Add another child

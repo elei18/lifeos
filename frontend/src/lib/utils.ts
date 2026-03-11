@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { formatDistanceToNow, format, differenceInYears, differenceInMonths } from 'date-fns';
+import { formatDistanceToNow, format } from 'date-fns';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -18,15 +18,13 @@ export function formatFullDate(dateString: string): string {
   return format(new Date(dateString), 'EEEE, MMMM d');
 }
 
-export function getChildAge(dateOfBirth: string | null): string {
-  if (!dateOfBirth) return '';
-  const dob = new Date(dateOfBirth);
-  const years = differenceInYears(new Date(), dob);
-  if (years === 0) {
-    const months = differenceInMonths(new Date(), dob);
-    return months <= 1 ? '1 month' : `${months} months`;
-  }
-  return years === 1 ? '1 year' : `${years} years`;
+export function getChildAge(birthSeason: string | null, birthYear: number | null): string {
+  if (!birthYear) return '';
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - birthYear;
+  if (age <= 0) return 'baby';
+  const label = age === 1 ? '1 year' : `${age} years`;
+  return birthSeason ? `${label} (${birthSeason})` : label;
 }
 
 export function getPersonLabel(personType: string, childName?: string, partnerName?: string): string {
